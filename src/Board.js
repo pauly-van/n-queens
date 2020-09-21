@@ -2,6 +2,7 @@
 // It's part of the Board Visualizer
 // The only portions you need to work on are the helper functions (below)
 
+// var myBoard = new Board({n: 4});
 (function() {
 
   window.Board = Backbone.Model.extend({
@@ -62,7 +63,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,11 +80,30 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      // create variable for current row
+      let currentRow = this.get(rowIndex);
+      let sum = 0;
+      for ( let i = 0; i < currentRow.length; i++) {
+        if (currentRow[i] === 1) {
+          sum++;
+        }
+      }
+      if (sum > 1) {
+        return true;
+      }
+
       return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      let rows = this.attributes.n;
+
+      for( let i = 0; i<rows; i++){
+       if(this.hasRowConflictAt(i)) {
+         return true;
+       }
+      }
       return false; // fixme
     },
 
@@ -94,11 +114,32 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      // var for count of pieces in column
+
+      // loop through n rows
+      // every time there is a piece in colIndex, increment the sum
+      // if sum is > 1 return true
+      //else return false
+      var sum = 0;
+      for (var i = 0; i < this.attributes.n; i++) {
+        var row = this.get(i);
+        console.log(row);
+        if (row[colIndex] === 1) {sum++}
+        if (sum > 1) {return true;}
+      }
+
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      // check for column conflicts for each index of the row
+      // return true if there are conflicts
+      for (var i = 0; i < this.attributes.n; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
