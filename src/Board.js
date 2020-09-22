@@ -99,10 +99,10 @@
     hasAnyRowConflicts: function() {
       let rows = this.attributes.n;
 
-      for( let i = 0; i<rows; i++){
-       if(this.hasRowConflictAt(i)) {
-         return true;
-       }
+      for ( let i = 0; i < rows; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
       }
       return false; // fixme
     },
@@ -124,8 +124,8 @@
       for (var i = 0; i < this.attributes.n; i++) {
         var row = this.get(i);
         console.log(row);
-        if (row[colIndex] === 1) {sum++}
-        if (sum > 1) {return true;}
+        if (row[colIndex] === 1) { sum++; }
+        if (sum > 1) { return true; }
       }
 
       return false; // fixme
@@ -150,8 +150,38 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      //colIndex-rowIndex
+
+      // sum variable to count number pieces
+      // var firstIndex for getFirstRowColIndex(mDCIAR, 0)
+      //iterate through each row 
+        //starting at mDCIAR for row 0
+        // pass value through getFirstRowColIndex function
+        //increment mDCAIR on next row, for each iteration
+          //if incremented mDCAIR = 1, then increment sum
+
+
+
+      //if sum > 1 return true else false
       return false; // fixme
     },
+
+// 2:0
+// 3:-1
+// 4:-2 
+// 5:-3
+// 6:-4
+
+// 4x4 can have -2
+// [0,0,0,0]
+// [0,0,0,0]
+// [1,0,0,0]
+// [0,1,0,0]
+
+// 3x3 can -1
+// [1,0,0]
+// [0,1,0]
+// [0,0,1]
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
