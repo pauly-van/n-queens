@@ -123,7 +123,6 @@
       var sum = 0;
       for (var i = 0; i < this.attributes.n; i++) {
         var row = this.get(i);
-        console.log(row);
         if (row[colIndex] === 1) { sum++; }
         if (sum > 1) { return true; }
       }
@@ -149,42 +148,111 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      //colIndex-rowIndex
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow, sum = 0) {
+      //collect the matrix
+      let board = this.rows();
+      let indexStart = majorDiagonalColumnIndexAtFirstRow;
 
-      // sum variable to count number pieces
-      // var firstIndex for getFirstRowColIndex(mDCIAR, 0)
-      //iterate through each row 
-        //starting at mDCIAR for row 0
-        // pass value through getFirstRowColIndex function
-        //increment mDCAIR on next row, for each iteration
-          //if incremented mDCAIR = 1, then increment sum
+      // if indexStart is greater than equal to 0
+      //var col = index start
+      // var rowindex = 0
+      // while col < n
+      // if the row[col] in the matrix === 1, then increment sum
+      // increment row++ and col++
+      if (indexStart >= 0) {
+        let col = indexStart;
+        let row = 0;
+        while ( col < this.attributes.n) {
+          if (board[row][col] === 1) {
+            sum++;
+          }
+          row++;
+          col++;
+        }
+      }
 
+      // if indexStart is < 0
+      // var col = 0
+      // var row = absolute value indexStart
+      // while row < n
+      // if the row and col in matrix ===1, then increment sum
+      // increment row++ and col++
+      if (indexStart < 0) {
+        let col = 0;
+        let row = Math.abs(indexStart);
+        while (row < this.attributes.n) {
+          if (board[row][col] === 1) {
+            sum++;
+          }
+          row++;
+          col++;
+        }
+      }
 
+      if (sum > 1) {
+        return true;
+      }
 
-      //if sum > 1 return true else false
       return false; // fixme
     },
+    // if sum > 1 return true
+    //else false
 
-// 2:0
-// 3:-1
-// 4:-2 
-// 5:-3
-// 6:-4
 
-// 4x4 can have -2
-// [0,0,0,0]
-// [0,0,0,0]
-// [1,0,0,0]
-// [0,1,0,0]
 
-// 3x3 can -1
-// [1,0,0]
-// [0,1,0]
-// [0,0,1]
+
+    // start at first row col index
+    //see if there's a piece
+    //if there is, then increment sum
+    // if sum equals 2 then return true
+    //increment row and col index for next iteration
+    // repeat above until col index is equal to n-1 or row index is equal to n-1
+
+
+    // pass value through getFirstRowColIndex function
+    //increment mDCAIR on next row, for each iteration
+    //if incremented mDCAIR = 1, then increment sum
+
+
+
+    //if sum > 1 return true else false
+
+    // 2:0
+    // 3:-1
+    // 4:-2
+    // 5:-3
+
+    // 4x4 can have -2
+    //  21[0,1,2,3]
+    //   2[0,0,0,2]
+    //    [2,0,0,0]
+    //    [0,2,0,0]
+
+
+    // 4x4 can have -2
+    //  -1[0,0,0,0]
+    //    [0,0,0,0]
+    //    [0,0,0,0]
+    //    [0,0,0,0]
+
+    // 3x3 can -1
+    // [1,0,0]
+    // [0,1,0]
+    // [0,0,1]
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      //traverse through each row
+      var size = this.attributes.n;
+      var low = -(size-2);
+      var high = size - 1;
+      while (low < high) {
+        if (this.hasMajorDiagonalConflictAt(low)) {
+          return true;
+        }
+        low++;
+      }
+
       return false; // fixme
     },
 
