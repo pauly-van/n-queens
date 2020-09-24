@@ -16,7 +16,61 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+/*o: array of arrays solution
+i: num of rows and columns
+c: n will be an integer, index values are 0s and 1s, pieces must be added to board without row nor col conflicts
+e: ?
+//EXPLANATION
+//Find first empty piece on board and place a piece
+//Remove row and col from possible solutions
+//In an unused row and column, find first empty piece on board and place piece
+//keep going until there are no more empty pieces
+//return the board
+
+//Remove used rows and cols from list of empty rows and cols, while looking for one
+
+//Every piece that is placed do a sanity check for row and column that can exclude placement via conflict methods
+// If trying to place a piece has conflicts, then skip that row, col, or diagonal while looking for the next space
+
+//MVP
+//Look at every piece from top left to bottom right
+//If the space does not have a conflict, then place a piece
+//Repeat above until there are no more empty places on the board
+//Return the board
+
+//
+
+
+[[1]]
+
+[[1,0],[0,1]]
+[[0,1],[1,0]]
+
+*/
+  var board = new Board({n: n});
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      if (board['attributes'][i][j] === 0) {
+        board.togglePiece(i, j);
+        if (board.hasRowConflictAt(i) || board.hasColConflictAt(j)) {
+          board.togglePiece(i, j);
+        } else { continue; }
+      }
+    }
+  }
+
+  var solution = board.rows();
+
+  // for each element in solutions board
+  // if element is equal 0
+  // place a piece on that space
+  // if there are row or col conflicts remove piece and advance to next
+  // if there are no conflicts continue
+  // if iterate through whole board then return solution
+
+
+
+
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
