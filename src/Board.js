@@ -189,6 +189,9 @@
         }
       }
 
+
+
+
       if (sum > 1) {
         return true;
       }
@@ -224,9 +227,9 @@
 
     // 4x4 can have -2
     //  21[0,1,2,3]
-    //   2[0,0,0,2]
+    //   2[1,0,0,2]
     //    [2,0,0,0]
-    //    [0,2,0,0]
+    //    [3,2,0,0]
 
 
     // 4x4 can have -2
@@ -244,7 +247,7 @@
     hasAnyMajorDiagonalConflicts: function() {
       //traverse through each row
       var size = this.attributes.n;
-      var low = -(size-2);
+      var low = -(size - 2);
       var high = size - 1;
       while (low < high) {
         if (this.hasMajorDiagonalConflictAt(low)) {
@@ -252,22 +255,79 @@
         }
         low++;
       }
-
       return false; // fixme
     },
-
-
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow, sum = 0) {
+      var n = this.attributes.n;
+      var board = this.rows();
+      var indexStart = minorDiagonalColumnIndexAtFirstRow;
+      if (indexStart >= n) {
+        var col = n - 1;
+        var row = indexStart - n + 1;
+        while (row <= n - 1) {
+          if (board[row][col] === 1) {
+            sum++;
+          }
+          row++;
+          col--;
+        }
+      } else {
+        var col = indexStart;
+        var row = 0;
+        while (col >= 0) {
+          if (board[row][col] === 1) {
+            sum++;
+          }
+          row++;
+          col--;
+        }
+      }
+      if (sum > 1) { return true; }
       return false; // fixme
     },
+    // if index start is greater or equal to n
+    // while row < n-1
+    // start on row = columnindex - n + 1 at end of row (n-1)
+    // if that element is a piece
+    // sum ++
+    // row ++
+    // col --
+    // otherwise
+    // while col >= 0
+    // col start on index start, row 0
+    // if theres a piece
+    // row++, col--
+    // add to sum
+    // if the sum is greater than 1
+    // return true
+
+    //    [0,0,0,0]n ....2n-3
+    //    [0,0,0,0]
+    //    [0,0,0,0]
+    //    [0,0,0,0]
+
+
+    //    [,1,2,3]456
+    //    [1,0,0,4]
+    //    [2,0,4,5]
+    //    [3,4,5,0]
+
+    //n-1 + n-2 = 2n-3
+
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      let size = this.attributes.n;
+      for (let i = 1; i <= 2 * (size) - 3; i++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     }
 
