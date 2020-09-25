@@ -102,7 +102,9 @@ and check collision... repeat until place is found or end of col index
   
   // 
   var solutionCount = 0; 
-  let board = new Board({n});
+  var size = n;
+  let board = new Board({n: size});
+
   //create a function that repeats placing pieces on rows called findSpot
   // lets say nRooksPlaced = 0 (when this reaches n stop recursing)
   // lets say boardview is the matrix using .rows()
@@ -120,30 +122,69 @@ and check collision... repeat until place is found or end of col index
   // call findSpot on prev row 
           
 
-  let recursiveSpot = function(rowIndex) {
-    // so if row is equal n-1 and an piece is placed
-    // increment solutions count
-    // return (to stop recursing)
+  let recursiveSpot = function(rowIndex, colIndex) {
+  // if rowIndex === n
+  //increment solutionCount
+  // decrement rowIndex
+  // toggleoff at rowIndex and colIndex
+  // increment colIndex;
+  // console.log(board.rows());
+  // console.log('row: ' + rowIndex + ',  col: ' + colIndex + ',  n:' + n + ', solutionCount: ' + solutionCount);
+    if (n === 0) { return; }
+    if (n === 1) {
+      solutionCount = 1;
+      return;
+    }
+    if (solutionCount === 4) { return; }
+    if ( rowIndex === n) {
+      // console.log('row' + rowIndex + 'col' + colIndex);
+      solutionCount++;
+      //go to above row
+      rowIndex--;
+      colIndex = board.get(rowIndex).indexOf(1);
+      board.togglePiece(rowIndex, colIndex);
+      colIndex++;
+    }
+    
+    // if colIndex === n
+    //if row === 0 then return -- all solutions done
+    // get prev row-- information and get colIndex of piece
+    //toggle off piece
+    // invoke recusiveSpot on prev row-- and col index++ of the piece
+    if ( colIndex === n) {
+      console.log(rowIndex);
+      rowIndex--;
+      colIndex = board.get(rowIndex).indexOf(1);
+      board.togglePiece(rowIndex, colIndex++);
+      //  colIndex++;
+      if ( rowIndex === 0 && colIndex === n) {
+        return; /*all solutions done*/
+      }
+    }
+    
+    board.togglePiece(rowIndex, colIndex);
+    console.log('num of solutions: ', solutionCount);
     // toggle piece on rowIndex colIndex
     // check for conflicts
     // if there are no conflicts
-    // invoke recursiveSpot on next row
+    // invoke recursiveSpot on next row -- row 2 recursiveSpot(rowIndex+1, colIndex);
+    if (!board.hasRowConflictAt(rowIndex) && !board.hasColConflictAt(colIndex)) {
+      console.log('No conflict: ', board.rows());
+      colIndex = 0;
+      recursiveSpot(++rowIndex, colIndex);
+    } else {
+      // if conflicts
+      //toggle piece to remove it
+      //invoke recursiveSpot on next col recursiveSpot(rowIndex, colIndex+1); (1,1)
+      console.log('Conflict: ', board.rows());
+      board.togglePiece(rowIndex, colIndex);
+      recursiveSpot(rowIndex, ++colIndex);
+    }
+
     
   };
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-  recursiveSpot(0);
+ 
+  recursiveSpot(0, 0);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
