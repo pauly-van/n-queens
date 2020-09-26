@@ -76,32 +76,32 @@ e: ?
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   //output: number — count of solutinos for board of n size
-  //input: n — board size 
+  //input: n — board size
   //constraints: n is an integer
   // edge cases: find all possible solutions
 
-  //As the solutions function finds an open space on the board, 
-  //we should be able to add a piece, yet also go back to this point of our function and let it carry out for the next possible open space (this is to determine other possible spaces at the certain point in execution) 
+  //As the solutions function finds an open space on the board,
+  //we should be able to add a piece, yet also go back to this point of our function and let it carry out for the next possible open space (this is to determine other possible spaces at the certain point in execution)
   // let the function go until the end for each iteration / possible solution, and increment our solutionCount each time
 
 
   //work: seeing if can put piece down or not
   // togglePiece at current row and col
   // if board.hasRowConflictAt current row or board.hasColConflictAt current col then we togglePiece again -- skip space
-  // 
+  //
 
 
-  /* 2nd explanation 
+  /* 2nd explanation
 1. first we want to put a piece on first available spot on first row,
 2. then we want to go into 2nd row and place a piece and see if theres a conflict, if there is a conflict move piece to next col
 and check collision... repeat until place is found or end of col index
-3. Once a place is found continue down the rows until all pieces are placed and add to solutions count 
+3. Once a place is found continue down the rows until all pieces are placed and add to solutions count
 4. repeat steps 1-3 for the first piece placed on board until end of column index
 5. return the count
 */
-  
-  // 
-  var solutionCount = 0; 
+
+  //
+  var solutionCount = 0;
   var size = n;
   let board = new Board({n: size});
 
@@ -113,14 +113,14 @@ and check collision... repeat until place is found or end of col index
   // place a piece
   // nRooksPlaced increment
   // call findSpot on next row
-  // otherwise 
+  // otherwise
   // continue to next element in row
   // place a piece/check for conflicts... and so on
-  // if no space can be found 
+  // if no space can be found
   // nRooksPlaced decrement
   // reset prev row to [0,0.... n] (starting at last index?)
-  // call findSpot on prev row 
-          
+  // call findSpot on prev row
+
 
   let recursiveSpot = function(rowIndex, colIndex) {
   // if rowIndex === n
@@ -135,9 +135,11 @@ and check collision... repeat until place is found or end of col index
       solutionCount = 1;
       return;
     }
-    if (solutionCount === 4) { return; }
+    if (solutionCount === 14) { return; }
     if ( rowIndex === n) {
       // console.log('row' + rowIndex + 'col' + colIndex);
+      console.log('rows for solution ' + (solutionCount+1));
+      console.log(board.rows());
       solutionCount++;
       //go to above row
       rowIndex--;
@@ -145,23 +147,29 @@ and check collision... repeat until place is found or end of col index
       board.togglePiece(rowIndex, colIndex);
       colIndex++;
     }
-    
+
     // if colIndex === n
     //if row === 0 then return -- all solutions done
     // get prev row-- information and get colIndex of piece
     //toggle off piece
     // invoke recusiveSpot on prev row-- and col index++ of the piece
     if ( colIndex === n) {
-      console.log(rowIndex);
-      rowIndex--;
-      colIndex = board.get(rowIndex).indexOf(1);
-      board.togglePiece(rowIndex, colIndex++);
+      var backTrack = function() {
+        rowIndex--;
+        colIndex = board.get(rowIndex).indexOf(1);
+        board.togglePiece(rowIndex, colIndex);
+        colIndex++;
+        if (colIndex === n && rowIndex > 0) {
+          backTrack();
+        }
+      };
+      backTrack();
       //  colIndex++;
       if ( rowIndex === 0 && colIndex === n) {
         return; /*all solutions done*/
       }
     }
-    
+
     board.togglePiece(rowIndex, colIndex);
     console.log('num of solutions: ', solutionCount);
     // toggle piece on rowIndex colIndex
@@ -181,9 +189,9 @@ and check collision... repeat until place is found or end of col index
       recursiveSpot(rowIndex, ++colIndex);
     }
 
-    
+
   };
- 
+
   recursiveSpot(0, 0);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
