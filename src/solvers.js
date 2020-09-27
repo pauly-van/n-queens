@@ -197,46 +197,33 @@ window.findNQueensSolution = function(n) {
 window.countNQueensSolutions = function(n) {
   var solutionCount = 0; //fixme
   var board = new Board({n}); //fixme
-  var pieceCount = 0;
-
-  if (n === 0 || n === 1) {
-    solutionCount++;
-    return solutionCount;
-  }
-
-  const checkRow = function(row) {
-    let currentRow = row;
+  const checkRow = function(rowIndex) {
+    let currentRowIndex = rowIndex;
+    let rowArr = board.get(currentRowIndex);
+    if (n === 1) {
+      solutionCount++;
+      return;
+    }
+    if (currentRowIndex === n) {
+      solutionCount++;
+      return;
+    }
     for (let i = 0; i <= n; i++) {
-      if (board.get(row).includes(1) && pieceCount === n) {
-        solutionCount++;
-        return;
+      if (currentRowIndex > rowIndex) {
+        currentRowIndex = rowIndex;
       }
-      if (row === 0 && i === n) {
-        var one = board.get(row).indexOf(1);
-        board.togglePiece(row, one);
-        pieceCount--;
+      if (board.get(currentRowIndex).includes(1)) {
+        var one = board.get(currentRowIndex).indexOf(1);
+        board.togglePiece(currentRowIndex, one);
       }
       if (i === n) {
         return;
       }
-      if (currentRow > row) {
-        currentRow = row;
-      }
-      if (currentRow === n) {
-        return;
-      }
-      if (board.get(currentRow).includes(1)) {
-        var one = board.get(currentRow).indexOf(1);
-        board.togglePiece(currentRow, one);
-        pieceCount--;
-      }
-      board.togglePiece(currentRow, i);
-      pieceCount++;
-      if (board.hasAnyQueenConflictsOn(currentRow, i)) {
-        board.togglePiece(currentRow, i);
-        pieceCount--;
+      board.togglePiece(currentRowIndex, i);
+      if (board.hasAnyQueenConflictsOn(currentRowIndex, i)) {
+        board.togglePiece(currentRowIndex, i);
       } else {
-        checkRow(++currentRow);
+        checkRow(++currentRowIndex);
       }
     }
   };
